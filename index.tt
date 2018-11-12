@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>Charles Darwin Boleta</title>
+      <style> 
+            *{   
+              -webkit-print-color-adjust: exact !important; 
+              font-family: helvetica; 
+              font-size: .8rem;               
+            }
+
+              table 
+                  {
+                    width: 100%;  
+                    border-collapse: collapse;  
+                    text-align: center;
+                    width: 700px;
+                  }
+               
+              {
+                padding: 5px;
+              }
+              .Cats 
+                {
+                  background-color : #A4A4A4; 
+                  color : #FFFFFF; 
+                  text-align : rigth;
+                }
+              .Dats
+                {
+                  text-align: left;
+                  width: 40%;
+                }
+              .Dats2
+                {
+                  text-align: left;
+                  width: 100%;
+                }
+              .Dats3
+                {
+                  text-align: center;
+                  border-top: 2pt solid black;
+                }
+              .Grads
+                {
+                  text-align: center;
+                }
+              .Grads2
+                {
+                  text-align: center;
+                  border-left: 2pt solid black;
+                }
+              .Prom 
+                {
+                  border-top: 2pt solid black;                   
+                }
+              .Pie
+                {
+                  text-align: center;
+                  background-color : #A4A4A4; 
+                  color : #FFFFFF; 
+                }
+
+                th, td {
+                  border: .5px solid;
+                }
+                .mt {
+                  text-align: left;
+                }
+
+                .header-space {
+                  margin-top: 200px;
+                }
+            </style>
+    </head>
+    
+    <body>
+
+      <div class="header-space"></div>
+
+      <table>
+      [% FOREACH da = data %]
+          <!--- periodos -->
+            <tr>
+            <td></td>
+            [% FOREACH period = da.grades.categories.0.classes.0.subcicles.0.periods %]
+
+                <td colspan="2"><b>[% period.name %]</b></td>
+
+            [% END %]
+            <td><b>Final</b></td>
+            </tr>
+            <tr>
+              <td><b>Materia</b></td>
+              <td><b>Cal.</b></td>
+              <td><b>Des.</b></td>
+              <td><b>Cal.</b></td>
+              <td><b>Des.</b></td>
+              <td><b>Cal.</b></td>
+              <td><b>Des.</b></td>
+              <td><b>Cal.</b></td>
+              <td><b>Des.</b></td>
+              <td><b>Cal.</b></td>
+              <td><b>Des.</b></td>
+              <td></td>
+            </tr>
+          [% FOREACH cat = da.grades.categories %]
+            
+            [% FOREACH materia = cat.classes %]
+            
+              <tr>
+                <td class="mt">[% materia.name %]</td>
+                [% FOREACH sub = materia.subcicles %]
+                  [% FOREACH period = sub.periods %]
+                    <td> [% period.pre_conversion_grade %] </td>
+                    <td> <span> [% period.grade %] </span></td>
+                    
+                    [% END %]
+                    
+                  [% END %] 
+                  <td>[% materia.average %]</td>
+                </tr>
+              [% END %]
+            [% END %] 
+          
+        
+        <!--- PROMEDIOS -->
+
+      
+          <tr>
+          <td><b>Promedios</b></td>
+           
+           [% FOREACH av = da.grades.totals.subcicles.0.periods %]
+              <td colspan="2" style="text-align: center;">[% av.average%]</td>
+                [% IF loop.last %]  
+                    [% celdas = 5 - da.grades.totals.subcicles.0.periods.size %]  
+                    [% WHILE celdas > 0 %]  
+                      <td style = "text-align : center ; border-left: 2pt solid black;">  </td>  
+                      [% celdas = celdas - 1 %]  
+                    [% END %] 
+                  [% END %]                                   
+              [% END %]
+          </tr>
+          
+          [% FOREACH cat = da.grades.categories %]
+            
+            [% FOREACH materia = cat.classes %]
+            
+              <tr>
+                <td class="mt">[% materia.name %]</td>
+                <td colspan="12"></td>
+                </tr>
+
+              [% END %]
+
+          [% END %]
+
+
+        </table>
+
+    </body>
+  [% END %] 
+  </html>
+
+
+  [% ttf.inspect(data)%]
+
+  [%  ttf.inspect(data.0.grades.totals) %]
